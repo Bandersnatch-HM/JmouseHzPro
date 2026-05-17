@@ -17,8 +17,8 @@
 
 // ===== Movement Defaults =====
 #define DEFAULT_MOVE_MODE       7     // Random Mix
-#define DEFAULT_MOVE_INTERVAL   30000 // 30 seconds
-#define DEFAULT_MOVE_AMPLITUDE  2     // 2 pixels
+#define DEFAULT_MOVE_INTERVAL   5000  // 5 seconds
+#define DEFAULT_MOVE_AMPLITUDE  5     // 5 pixels
 #define DEFAULT_VARIATION_PCT   30    // +/-30% timing variation
 #define DEFAULT_HUMAN_PAUSES    true
 
