@@ -91,7 +91,7 @@ El dispositivo se controla mediante un único botón físico (conectado al pin `
 ```
 [ Click Simple ]      --> Pausar / Reanudar actividad (Alterna entre Jiggle y Pausa).
 [ Doble Click ]       --> Cambiar intervalo de jiggle cíclicamente (5s -> 15s -> 30s -> 60s).
-[ Triple Click ]      --> Resetear vinculaciones activas de BLE + Forzar un jiggle inmediato.
+[ Triple Click ]      --> Cambiar patrón de movimiento cíclicamente entre los 9 modos.
 [ Mantener 3 seg. ]   --> Activar / Desactivar el Portal Web WiFi de configuración.
 [ Mantener 10 seg. ]  --> Reseteo de Fábrica (Borrado total de NVS y emparejamientos BLE).
 [ Mantener al Boot ]  --> 🛟 Reseteo de Emergencia por Hardware (Hard Low-level Wipe).
@@ -139,7 +139,7 @@ sequenceDiagram
 
 El principal factor diferenciador de Jmouse HzPro frente a soluciones básicas es su motor estocástico de emulación humana, diseñado para evadir algoritmos heurísticos y de inteligencia artificial de monitoreo de actividad (ej. herramientas de supervisión corporativa).
 
-### Los 8 Patrones de Movimiento
+### Los 9 Patrones de Movimiento
 
 1. `Micro Jiggle` (Modo 0): Movimiento imperceptible de 1-2 píxeles hacia adelante y hacia atrás. No interfiere con el trabajo normal del usuario en la pantalla.
 2. `Horizontal` (Modo 1): Barrido suave en el eje X.
@@ -148,7 +148,8 @@ El principal factor diferenciador de Jmouse HzPro frente a soluciones básicas e
 5. `Smooth Bezier` (Modo 4): Generación matemática de curvas de Bézier cúbicas, imitando los trazos curvos naturales de una mano humana sobre un ratón físico.
 6. `Circle` (Modo 5): Trayectoria orbital calculada trigonométricamente.
 7. `Natural Drift` (Modo 6): Deriva aleatoria continua con inercia y suavizado.
-8. `Random Mix` (Modo 7 - *Por defecto*): Selección estocástica rotativa entre todos los patrones anteriores.
+8. `Random Mix` (Modo 7): Selección estocástica rotativa entre todos los patrones anteriores.
+9. `Full+Shift` (Modo 8 - *Por defecto*): Realiza grandes barridos que recorren toda la pantalla y envía pulsaciones invisibles de la tecla `Shift` para engañar a sistemas de rastreo más severos.
 
 ### Algoritmos Anti-Detección Heurística
 

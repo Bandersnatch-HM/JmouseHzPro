@@ -233,15 +233,31 @@ void handleButton(ButtonEvent evt) {
             break;
         }
 
-        case BTN_TRIPLE_CLICK:
-            DBGLN("[Main] Triple click: Restarting BLE advertising & Force jiggle!");
+        case BTN_TRIPLE_CLICK: {
+            DBGLN("[Main] Triple click: Ciclando modo de movimiento!");
+            cfg.moveMode = (cfg.moveMode + 1) % MODE_COUNT;
+            movement.setMode(cfg.moveMode);
+            storage.saveConfig(cfg);
+            DBGF("[Main] Modo cambiado a %d\n", cfg.moveMode);
+            
+            // Trigger visual feedback (1 to 9 blinks)
+            speedBlinksLeft = cfg.moveMode + 1;
+            ledState = false;
+            lastSpeedBlink = millis();
+            digitalWrite(LED_PIN, LED_OFF);
+            
             #if MODE_BLE
-            mouseDriver.restartAdvertising();
+            // Como extra de conveniencia, también reiniciamos advertising si está desconectado
+            if (!mouseConnected()) {
+                mouseDriver.restartAdvertising();
+            }
             #endif
+            
             if (mouseConnected()) {
                 doJiggle();
             }
             break;
+        }
 
         case BTN_LONG_PRESS:
             if (portalActive) {
