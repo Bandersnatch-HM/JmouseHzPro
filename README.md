@@ -40,8 +40,11 @@ Hemos preparado este repositorio para que cualquier usuario, con o sin experienc
 ### Opción A: Instalación Automatizada (Recomendada)
 No necesitas recordar comandos complejos. El repositorio incluye un asistente interactivo en Python:
 
-1. **Requisitos previos**: Asegúrate de tener instalado [Python 3](https://www.python.org/downloads/) (marca la casilla *"Add Python to PATH"* durante la instalación) y [PlatformIO Core CLI](https://docs.platformio.org/en/latest/core/index.html) (`pip install platformio`).
-2. Conecta tu ESP32 al ordenador mediante un cable USB (asegúrate de que sea un cable de datos y no solo de carga).
+1. **Requisitos previos**: Asegúrate de tener instalado [Python 3](https://www.python.org/downloads/) (marca la casilla *"Add Python to PATH"* durante la instalación) y [PlatformIO Core CLI](https://docs.platformio.org/en/latest/core/index.html) (`pip install -U platformio`).
+2. **Controladores USB-Serial (Drivers)**: Si tu ordenador no detecta el ESP32 al conectarlo, instala el driver correspondiente a tu placa:
+   * **Placas con chip CP210x**: [Descargar Drivers de Silicon Labs](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
+   * **Placas con chip CH340 / CH34x**: [Descargar Drivers de WCH](http://www.wch-ic.com/downloads/CH341SER_EXE.html)
+3. Conecta tu ESP32 al ordenador mediante un cable USB (asegúrate de que sea un cable de datos y no solo de carga).
 3. Abre una terminal en la carpeta del proyecto y ejecuta el asistente:
    ```bash
    python flash_tool.py

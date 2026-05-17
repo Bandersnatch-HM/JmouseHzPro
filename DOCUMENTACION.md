@@ -45,7 +45,9 @@ graph TD
 ### Requisitos Previos del Entorno
 1. **Python 3.x**: Asegúrate de que esté agregado a la variable del sistema `PATH`.
 2. **PlatformIO Core CLI**: Instalable en terminal ejecutando `pip install -U platformio`.
-3. **Controladores USB-Serial**: Controladores actualizados para chips CH340, CP2102 o el puerto USB nativo según la placa de desarrollo.
+3. **Controladores USB-Serial (Drivers)**: Es fundamental contar con los controladores correctos para que el sistema operativo asigne un puerto COM virtual a la placa de desarrollo. Según el chip conversor USB-UART de tu placa:
+   * **Controlador CP2102 / CP210x**: [Descargar Silicon Labs VCP Drivers](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
+   * **Controlador CH340 / CH341**: [Descargar WCH CH34x Drivers](http://www.wch-ic.com/downloads/CH341SER_EXE.html)
 
 ### Método Rápido (Script Automatizado)
 El proyecto incluye un script en Python multiplataforma diseñado para facilitar la compilación y flasheo sin interactuar con comandos complejos de PlatformIO:
