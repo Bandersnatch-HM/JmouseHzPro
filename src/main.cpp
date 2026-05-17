@@ -145,16 +145,7 @@ void updateLED() {
         return; // Skip normal LED logic while showing speed
     }
 
-    if (portalActive) {
-        // Triple blink pattern for portal mode
-        unsigned long cycle = now % 2000;
-        if (cycle < 100 || (cycle > 200 && cycle < 300) ||
-            (cycle > 400 && cycle < 500)) {
-            digitalWrite(LED_PIN, LED_ON);
-        } else {
-            digitalWrite(LED_PIN, LED_OFF);
-        }
-    } else if (mouseConnected()) {
+    if (mouseConnected()) {
         if (paused) {
             // Breathing LED using ledc (PWM)
             unsigned long cycle = now % 3000;
@@ -168,6 +159,15 @@ void updateLED() {
             ledcDetachPin(LED_PIN);
             pinMode(LED_PIN, OUTPUT);
             digitalWrite(LED_PIN, LED_ON);
+        }
+    } else if (portalActive) {
+        // Triple blink pattern for portal mode when BT not connected
+        unsigned long cycle = now % 2000;
+        if (cycle < 100 || (cycle > 200 && cycle < 300) ||
+            (cycle > 400 && cycle < 500)) {
+            digitalWrite(LED_PIN, LED_ON);
+        } else {
+            digitalWrite(LED_PIN, LED_OFF);
         }
     } else {
         ledcDetachPin(LED_PIN);
@@ -245,17 +245,11 @@ void handleButton(ButtonEvent evt) {
 
         case BTN_LONG_PRESS:
             if (portalActive) {
-                DBGLN("[Main] Stopping web portal. Restarting...");
+                DBGLN("[Main] 3s Hold: Apagando Portal WiFi (Bluetooth sigue activo)...");
                 portal.stop();
                 portalActive = false;
-                delay(500);
-                ESP.restart();
             } else {
-                DBGLN("[Main] Starting web portal (Mouse paused for stability)");
-                #if MODE_BLE
-                mouseDriver.end();
-                #endif
-                delay(500);
+                DBGLN("[Main] 3s Hold: Encendiendo Portal WiFi...");
                 portal.begin(&cfg, &storage, &mouseCB, &movement);
                 portalActive = true;
             }
@@ -315,7 +309,7 @@ void handlePortalCmd(const String& cmd, int arg) {
         ESP.restart();
     } else if (cmd == "welcomeDone") {
         storage.markFirstRunDone(cfg);
-        DBGLN("[Main] Welcome dismissed. Restarting to enable BLE...");
+        DBGLN("[Main] Welcome dismissed. Restarting...");
         delay(1000);
         ESP.restart();
     }
@@ -366,11 +360,11 @@ void setup() {
     }
 
     DBGLN("╔══════════════════════════════════════╗");
-    DBGLN("║       Jmouse HzPro v1.0.0           ║");
+    DBGLN("║       Jmouse HzPro v1.0.0            ║");
     #if MODE_BLE
-    DBGLN("║   Mode: Bluetooth (BLE)             ║");
+    DBGLN("║   Mode: Bluetooth (BLE)              ║");
     #else
-    DBGLN("║   Mode: USB HID                     ║");
+    DBGLN("║   Mode: USB HID                      ║");
     #endif
     DBGLN("╚══════════════════════════════════════╝");
 
@@ -390,16 +384,17 @@ void setup() {
     movement.begin(cfg.moveMode, cfg.moveInterval, cfg.moveAmplitude,
                    cfg.variationPercent, cfg.humanPauses);
 
-    // Start mouse by default. Portal is accessed via 3s button hold.
-    DBGLN("[Main] Normal run: Starting mouse only (Press BOOT 3s for Web Portal)");
+    // Start mouse and portal in parallel!
+    DBGLN("[Main] Iniciando Bluetooth y Portal Web simultáneamente...");
     mouseDriver.begin(cfg.deviceName);
-    portalActive = false;
+    portal.begin(&cfg, &storage, &mouseCB, &movement);
+    portalActive = true;
 
     DBGF("[Main] Ready! Free Heap: %d\n", ESP.getFreeHeap());
     #if MODE_BLE
     DBGLN("[Main] Pair via Bluetooth as a mouse.");
     #endif
-    DBGLN("[Main] BOOT button: click=pause, 3s=portal/restart");
+    DBGLN("[Main] BOOT button: click=pause, 3s=toggle wifi, 10s=factory reset");
 }
 
 // ===== Main Loop =====
@@ -413,12 +408,9 @@ void loop() {
     // 2. Update web portal
     if (portalActive) {
         if (millis() - portal.getLastInteraction() > PORTAL_TIMEOUT_MS) {
-            DBGLN("[Main] ⏳ Web Portal inactivity timeout (5 min). Closing portal & resuming mouse...");
+            DBGLN("[Main] ⏳ Web Portal inactivity timeout (5 min). Apagando WiFi para ahorrar batería...");
             portal.stop();
             portalActive = false;
-            #if MODE_BLE
-            mouseDriver.begin(cfg.deviceName);
-            #endif
         }
 
         portal.update();
@@ -429,14 +421,12 @@ void loop() {
         if (portal.hasPendingCommand()) {
             handlePortalCmd(portal.getPendingCommand(), portal.getPendingArg());
         }
-    } else {
-        // Portal NOT active
     }
 
     // 3. Check connection & BLE Watchdog
     bool connected = mouseConnected();
     static unsigned long lastBleConnTime = millis();
-    if (connected || portalActive || MODE_USB) {
+    if (connected || MODE_USB) {
         lastBleConnTime = millis();
     } else {
         if (millis() - lastBleConnTime > 180000) { // 3 minutes
@@ -455,8 +445,8 @@ void loop() {
         DBGLN("[Main] ✗ Device disconnected");
     }
 
-    // 4. Execute jiggle if connected and not paused (AND portal is NOT active)
-    if (connected && !paused && !portalActive) {
+    // 4. Execute jiggle if connected and not paused
+    if (connected && !paused) {
         if (movement.shouldMove()) {
             doJiggle();
             DBGF("[Main] Jiggle #%lu (mode %d)\n", cfg.totalJiggles, cfg.moveMode);
