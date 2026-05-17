@@ -76,9 +76,9 @@ Para facilitar el despliegue en entornos donde no se cuente con herramientas de 
 1. Conectar el ESP32 al PC y acceder a [ESPTool Web Flasher](https://esptool.spacehuhn.com/).
 2. Pulsar **"Connect"** y emparejar con el puerto COM de la placa.
 3. Cargar los archivos generados en `release_binaries/` con sus respectivos offsets de memoria:
-   * **ESP32 Clásico:** `bootloader.bin` (`0x1000`), `partitions.bin` (`0x8000`), `firmware.bin` (`0x10000`).
-   * **ESP32-S2 / S3:** `bootloader.bin` (`0x0`), `partitions.bin` (`0x8000`), `firmware.bin` (`0x10000`).
-4. Iniciar la grabación con **"Program"**.
+   * **ESP32 Clásico:** `bootloader.bin` (`0x1000`), `partitions.bin` (`0x8000`), `boot_app0.bin` (`0xe000`), `firmware.bin` (`0x10000`).
+   * **ESP32-S2 / S3:** `bootloader.bin` (`0x0`), `partitions.bin` (`0x8000`), `boot_app0.bin` (`0xe000`), `firmware.bin` (`0x10000`).
+4. Iniciar la grabación con **"Program"** y al finalizar pulsar EN/RST.
 
 ---
 

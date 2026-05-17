@@ -10,6 +10,17 @@ def check_pio():
     if result.returncode == 0: return f"{sys.executable} -m platformio"
     return None
 
+def find_boot_app0():
+    home = os.path.expanduser("~")
+    possible_paths = [
+        os.path.join(home, ".platformio", "packages", "framework-arduinoespressif32", "tools", "partitions", "boot_app0.bin"),
+        os.path.join(home, ".platformio", "packages", "framework-arduinoespressif32@src-e51c893b890885e33d077c570f4decf0", "tools", "partitions", "boot_app0.bin"),
+    ]
+    for p in possible_paths:
+        if os.path.exists(p):
+            return p
+    return None
+
 def main():
     print("==================================================")
     print("   Jmouse HzPro - Exportador para Web Flasher")
@@ -19,6 +30,11 @@ def main():
     pio_cmd = check_pio()
     if not pio_cmd:
         print("[!] Error: PlatformIO no está instalado o no está en el PATH.")
+        sys.exit(1)
+
+    boot_app0_path = find_boot_app0()
+    if not boot_app0_path:
+        print("[!] Error: No se encontró boot_app0.bin en el sistema de PlatformIO.")
         sys.exit(1)
 
     environments = [
@@ -41,13 +57,14 @@ sin instalar Python, PlatformIO ni ninguna herramienta.
 1. Conecta tu ESP32 por USB a tu computadora.
 2. Abre tu navegador e ingresa a: https://esptool.spacehuhn.com/
 3. Haz clic en "Connect" y selecciona el puerto COM de tu ESP32.
-4. Selecciona tu modelo en las carpetas de este directorio y carga los 3 archivos con las siguientes direcciones de memoria exactas (Offsets):
+4. Selecciona tu modelo en las carpetas de este directorio y carga los 4 archivos con las siguientes direcciones de memoria exactas (Offsets):
 
 ------------------------------------------------------------
 A) PARA ESP32 CLASICO (ESP32_Clasico_Bluetooth):
 ------------------------------------------------------------
 [ 0x1000  ] -> bootloader.bin
 [ 0x8000  ] -> partitions.bin
+[ 0xe000  ] -> boot_app0.bin
 [ 0x10000 ] -> firmware.bin
 
 ------------------------------------------------------------
@@ -55,11 +72,12 @@ B) PARA ESP32-S3 y ESP32-S2 (Todos los modelos S2 y S3):
 ------------------------------------------------------------
 [ 0x0     ] -> bootloader.bin
 [ 0x8000  ] -> partitions.bin
+[ 0xe000  ] -> boot_app0.bin
 [ 0x10000 ] -> firmware.bin
 
 ------------------------------------------------------------
 5. Haz clic en el botón "Program" (o "Flash").
-6. ¡Listo! Cuando termine, presiona el botón EN/RST de tu placa.
+6. ¡Listo! Cuando termine, presiona el botón EN/RST de tu placa para iniciar.
 
 """
 
@@ -80,6 +98,9 @@ B) PARA ESP32-S3 y ESP32-S2 (Todos los modelos S2 y S3):
             target_dir = os.path.join(base_export_dir, folder_name)
             os.makedirs(target_dir, exist_ok=True)
             
+            # Copiar boot_app0.bin
+            shutil.copy2(boot_app0_path, os.path.join(target_dir, "boot_app0.bin"))
+
             files_to_copy = ["bootloader.bin", "partitions.bin", "firmware.bin"]
             success = True
             for file in files_to_copy:
@@ -91,11 +112,11 @@ B) PARA ESP32-S3 y ESP32-S2 (Todos los modelos S2 y S3):
                     success = False
             
             if success:
-                # Escribir un pequeño archivo info.txt en la carpeta
                 with open(os.path.join(target_dir, "offsets.txt"), "w", encoding="utf-8") as f:
                     f.write(f"Offsets para {folder_name} en esptool.spacehuhn.com:\n")
                     f.write(f"{boot_offset}  -> bootloader.bin\n")
                     f.write(f"0x8000  -> partitions.bin\n")
+                    f.write(f"0xe000  -> boot_app0.bin\n")
                     f.write(f"0x10000 -> firmware.bin\n")
                 print(f"  [+] Binarios exportados correctamente en: {target_dir}")
             else:
