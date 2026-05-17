@@ -1,0 +1,4 @@
+Offsets para ESP32_S3_Dual_Bluetooth_USB en esptool.spacehuhn.com:
+0x0  -> bootloader.bin
+0x8000  -> partitions.bin
+0x10000 -> firmware.bin

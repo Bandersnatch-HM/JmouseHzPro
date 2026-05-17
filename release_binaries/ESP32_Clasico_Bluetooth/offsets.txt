@@ -1,0 +1,4 @@
+Offsets para ESP32_Clasico_Bluetooth en esptool.spacehuhn.com:
+0x1000  -> bootloader.bin
+0x8000  -> partitions.bin
+0x10000 -> firmware.bin

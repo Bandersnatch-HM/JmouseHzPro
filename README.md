@@ -64,6 +64,22 @@ pio run -e esp32s3_ble -t upload
 pio run -e esp32s2 -t upload
 ```
 
+### Opción C: Flasheo por Navegador Web (Sin instalar herramientas)
+Si no deseas instalar Python ni PlatformIO en tu computadora, puedes usar Google Chrome o Microsoft Edge para cargar directamente los binarios precompilados:
+1. Conecta tu placa ESP32 por USB y abre [ESPTool Web Flasher (Spacehuhn)](https://esptool.spacehuhn.com/).
+2. Haz clic en **"Connect"** y selecciona el puerto COM de tu placa.
+3. Ve a la carpeta `release_binaries/` de este repositorio (puedes generarlos ejecutando `python export_web_binaries.py`).
+4. Selecciona tu modelo y añade los 3 archivos binarios con las siguientes direcciones exactas (offsets):
+   * **Para ESP32 Clásico:**
+     * `0x1000` -> `bootloader.bin`
+     * `0x8000` -> `partitions.bin`
+     * `0x10000` -> `firmware.bin`
+   * **Para ESP32-S2 y ESP32-S3:**
+     * `0x0` -> `bootloader.bin`
+     * `0x8000` -> `partitions.bin`
+     * `0x10000` -> `firmware.bin`
+5. Haz clic en **"Program"** (o Flash) y al finalizar presiona el botón EN/RST de tu placa.
+
 ---
 
 ## 🎮 ¿Cómo se usa? (Controles Físicos y LED)
