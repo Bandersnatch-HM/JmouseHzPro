@@ -139,11 +139,32 @@ void MovementEngine::_genNaturalDrift(MoveStep* s, uint8_t& c) {
         int8_t dy = random(-_amplitude, _amplitude + 1);
         totalX += dx;
         totalY += dy;
-        s[c] = {dx, dy, (uint8_t)random(10, 40)};
+        s[c] = {dx, dy, (uint8_t)random(10, 40), 0, 0};
         c++;
     }
     // Return to origin
-    s[c] = {(int8_t)-totalX, (int8_t)-totalY, 15};
+    s[c] = {(int8_t)-totalX, (int8_t)-totalY, 15, 0, 0};
+    c++;
+}
+
+void MovementEngine::_genFullScreenShift(MoveStep* s, uint8_t& c) {
+    c = 0;
+    int totalX = 0, totalY = 0;
+    int steps = 6;
+    for (int i = 0; i < steps; i++) {
+        // Movimientos grandes (amplitud multiplicada por 8 para barrer toda la pantalla)
+        int8_t dx = random(-_amplitude * 8, _amplitude * 8 + 1);
+        int8_t dy = random(-_amplitude * 8, _amplitude * 8 + 1);
+        totalX += dx;
+        totalY += dy;
+        // En el primer step se pulsa Shift (0x81), en el penúltimo se suelta
+        uint8_t kPress = (i == 0) ? 0x81 : 0;
+        uint8_t kRel = (i == steps - 2) ? 0x81 : 0;
+        s[c] = {dx, dy, (uint8_t)random(20, 50), kPress, kRel};
+        c++;
+    }
+    // Retornar al centro aproximadamente sin pulsar teclas
+    s[c] = {(int8_t)-totalX, (int8_t)-totalY, 30, 0, 0};
     c++;
 }
 
@@ -153,13 +174,14 @@ void MovementEngine::getNextSequence(MoveStep* steps, uint8_t& count) {
         mode = random(0, MODE_RANDOM_MIX); // Pick 0-6
     }
     switch (mode) {
-        case MODE_MICRO_JIGGLE:  _genMicroJiggle(steps, count); break;
-        case MODE_HORIZONTAL:    _genHorizontal(steps, count); break;
-        case MODE_VERTICAL:      _genVertical(steps, count); break;
-        case MODE_CROSS:         _genCross(steps, count); break;
-        case MODE_BEZIER:        _genBezier(steps, count); break;
-        case MODE_CIRCLE:        _genCircle(steps, count); break;
-        case MODE_NATURAL_DRIFT: _genNaturalDrift(steps, count); break;
-        default:                 _genMicroJiggle(steps, count); break;
+        case MODE_MICRO_JIGGLE:      _genMicroJiggle(steps, count); break;
+        case MODE_HORIZONTAL:        _genHorizontal(steps, count); break;
+        case MODE_VERTICAL:          _genVertical(steps, count); break;
+        case MODE_CROSS:             _genCross(steps, count); break;
+        case MODE_BEZIER:            _genBezier(steps, count); break;
+        case MODE_CIRCLE:            _genCircle(steps, count); break;
+        case MODE_NATURAL_DRIFT:     _genNaturalDrift(steps, count); break;
+        case MODE_FULL_SCREEN_SHIFT: _genFullScreenShift(steps, count); break;
+        default:                     _genMicroJiggle(steps, count); break;
     }
 }

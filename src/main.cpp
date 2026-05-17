@@ -23,8 +23,6 @@
 #include "button_handler.h"
 #include "movement.h"
 #include "web_portal.h"
-#include "usb_mouse.h"
-#include "ble_manager.h"
 
 // ===== Auto-detect connection mode =====
 // ESP32-S2: USB only (no BLE)
@@ -56,9 +54,11 @@ MovementEngine movement;
 WebPortal portal;
 
 #if MODE_BLE
+  #include "ble_manager.h"
   BleManager mouseDriver;
 #endif
 #if MODE_USB
+  #include "usb_mouse.h"
   UsbMouseManager mouseDriver;
 #endif
 
@@ -189,7 +189,9 @@ void doJiggle() {
     uint8_t count = 0;
     movement.getNextSequence(steps, count);
     for (uint8_t i = 0; i < count; i++) {
-        mouseMove(steps[i].dx, steps[i].dy);
+        if (steps[i].keyPress != 0) mouseDriver.pressKey(steps[i].keyPress);
+        if (steps[i].dx != 0 || steps[i].dy != 0) mouseMove(steps[i].dx, steps[i].dy);
+        if (steps[i].keyRelease != 0) mouseDriver.releaseKey(steps[i].keyRelease);
         delay(steps[i].delayMs);
     }
     storage.incrementJiggles(cfg);

@@ -4,6 +4,7 @@
 
 void UsbMouseManager::begin(const char* name) {
     _mouse.begin();
+    _keyb.begin();
     USB.productName(name);
     USB.manufacturerName(MANUFACTURER_NAME);
     USB.begin();
@@ -39,6 +40,18 @@ bool UsbMouseManager::wasJustDisconnected() {
 void UsbMouseManager::move(int8_t x, int8_t y, int8_t wheel) {
     if (_started) {
         _mouse.move(x, y, wheel);
+    }
+}
+
+void UsbMouseManager::pressKey(uint8_t key) {
+    if (_started) {
+        _keyb.press(key);
+    }
+}
+
+void UsbMouseManager::releaseKey(uint8_t key) {
+    if (_started) {
+        _keyb.release(key);
     }
 }
 

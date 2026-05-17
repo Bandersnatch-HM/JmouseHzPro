@@ -109,7 +109,7 @@ header{text-align:center;padding:24px 0 16px}
 <div class="card"><button class="btn btn-outline" onclick="sendCmd('restart')">🔄 Reiniciar</button><button class="btn btn-danger-full" onclick="sendCmd('factory')">⚠️ Factory Reset</button></div>
 </div></div></div>
 <script>
-const modeNames=['Micro','Horiz','Vert','Cruz','Bezier','Circle','Drift','Mix'];
+const modeNames=['Micro','Horiz','Vert','Cruz','Bezier','Circle','Drift','Mix','Full+Shift'];
 let state={connected:false,paused:false,mode:7,interval:30,amplitude:2,jiggles:0,uptime:0};
 function init(){buildModeGrid();fetchState();setInterval(fetchState,8000);}
 function fetchState(){fetch('/api/status').then(r=>r.json()).then(d=>{Object.assign(state,d);render();}).catch(()=>{});}

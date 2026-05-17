@@ -5,8 +5,7 @@
 
 #if HAS_BLE
 
-#include <Arduino.h>
-#include <BleMouse.h>
+#include <BleCombo.h>
 #include "config.h"
 
 // Bond management via ESP-IDF
@@ -24,6 +23,8 @@ public:
     void end();
     bool isConnected();
     void move(int8_t x, int8_t y, int8_t wheel = 0);
+    void pressKey(uint8_t key);
+    void releaseKey(uint8_t key);
     void setBatteryLevel(uint8_t level);
 
     // Bond management
@@ -39,7 +40,7 @@ public:
     bool wasJustDisconnected();
 
 private:
-    BleMouse* _mouse = nullptr;
+    BleCombo* _combo = nullptr;
     bool _connected = false;
     bool _prevConnected = false;
     unsigned long _connectedSince = 0;

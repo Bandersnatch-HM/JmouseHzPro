@@ -23,15 +23,16 @@
 #define DEFAULT_HUMAN_PAUSES    true
 
 // ===== Movement Mode IDs =====
-#define MODE_MICRO_JIGGLE   0
-#define MODE_HORIZONTAL     1
-#define MODE_VERTICAL       2
-#define MODE_CROSS          3
-#define MODE_BEZIER         4
-#define MODE_CIRCLE         5
-#define MODE_NATURAL_DRIFT  6
-#define MODE_RANDOM_MIX     7
-#define MODE_COUNT          8
+#define MODE_MICRO_JIGGLE       0
+#define MODE_HORIZONTAL         1
+#define MODE_VERTICAL           2
+#define MODE_CROSS              3
+#define MODE_BEZIER             4
+#define MODE_CIRCLE             5
+#define MODE_NATURAL_DRIFT      6
+#define MODE_RANDOM_MIX         7
+#define MODE_FULL_SCREEN_SHIFT  8
+#define MODE_COUNT              9
 
 // ===== WiFi AP & STA =====
 #define AP_SSID             "JmouseHzPro-Setup"

@@ -5,21 +5,21 @@
 void BleManager::begin(const char* name) {
     strncpy(_name, name, sizeof(_name) - 1);
     _name[sizeof(_name) - 1] = '\0';
-    if (_mouse) {
-        delete _mouse;
+    if (_combo) {
+        delete _combo;
     }
-    _mouse = new BleMouse(_name, MANUFACTURER_NAME, BATTERY_LEVEL);
-    _mouse->begin();
+    _combo = new BleCombo(_name, MANUFACTURER_NAME, BATTERY_LEVEL);
+    _combo->begin();
     _connected = false;
     _prevConnected = false;
     DBGF("[BLE] Started as '%s'\n", _name);
 }
 
 void BleManager::end() {
-    if (_mouse) {
-        _mouse->end();
-        delete _mouse;
-        _mouse = nullptr;
+    if (_combo) {
+        _combo->end();
+        delete _combo;
+        _combo = nullptr;
     }
     _connected = false;
     DBGLN("[BLE] Stopped");
@@ -27,7 +27,7 @@ void BleManager::end() {
 
 bool BleManager::isConnected() {
     _prevConnected = _connected;
-    _connected = (_mouse != nullptr) && _mouse->isConnected();
+    _connected = (_combo != nullptr) && _combo->isConnected();
     if (_connected && !_prevConnected) {
         _connectedSince = millis();
     }
@@ -43,14 +43,26 @@ bool BleManager::wasJustDisconnected() {
 }
 
 void BleManager::move(int8_t x, int8_t y, int8_t wheel) {
-    if (_mouse && _connected) {
-        _mouse->move(x, y, wheel);
+    if (_combo && _connected) {
+        _combo->move(x, y, wheel);
+    }
+}
+
+void BleManager::pressKey(uint8_t key) {
+    if (_combo && _connected) {
+        _combo->press(key);
+    }
+}
+
+void BleManager::releaseKey(uint8_t key) {
+    if (_combo && _connected) {
+        _combo->release(key);
     }
 }
 
 void BleManager::setBatteryLevel(uint8_t level) {
-    if (_mouse) {
-        _mouse->setBatteryLevel(level);
+    if (_combo) {
+        _combo->setBatteryLevel(level);
     }
 }
 

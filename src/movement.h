@@ -8,6 +8,8 @@ struct MoveStep {
     int8_t dx;
     int8_t dy;
     uint8_t delayMs; // delay after this step
+    uint8_t keyPress;   // 0 if none, e.g. 0x81 (KEY_LEFT_SHIFT)
+    uint8_t keyRelease; // 0 if none, e.g. 0x81
 };
 
 class MovementEngine {
@@ -45,6 +47,7 @@ private:
     void _genBezier(MoveStep* s, uint8_t& c);
     void _genCircle(MoveStep* s, uint8_t& c);
     void _genNaturalDrift(MoveStep* s, uint8_t& c);
+    void _genFullScreenShift(MoveStep* s, uint8_t& c);
     int8_t _clamp(float v);
 };
 
