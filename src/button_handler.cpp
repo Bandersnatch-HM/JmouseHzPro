@@ -77,7 +77,8 @@ ButtonEvent ButtonHandler::update() {
             case 1: return BTN_SINGLE_CLICK;
             case 2: return BTN_DOUBLE_CLICK;
             case 3: return BTN_TRIPLE_CLICK;
-            default: return BTN_SINGLE_CLICK;
+            case 6: return BTN_SIX_CLICKS;
+            default: return BTN_NONE; // Ignorar otros conteos de clics (ej. 4 o 5) para evitar confusiones
         }
     }
 

@@ -210,22 +210,22 @@ void handleButton(ButtonEvent evt) {
 
         case BTN_DOUBLE_CLICK: {
             // Cycle speed (interval)
-            const uint32_t INTERVALS[] = {5000, 15000, 30000, 60000};
+            const uint32_t INTERVALS[] = {2000, 5000, 15000, 30000, 60000};
             uint8_t currentIdx = 0;
-            for (uint8_t i = 0; i < 4; i++) {
+            for (uint8_t i = 0; i < 5; i++) {
                 if (cfg.moveInterval <= INTERVALS[i]) {
                     currentIdx = i;
                     break;
                 }
             }
-            currentIdx = (currentIdx + 1) % 4;
+            currentIdx = (currentIdx + 1) % 5;
             cfg.moveInterval = INTERVALS[currentIdx];
             movement.setInterval(cfg.moveInterval);
             storage.saveConfig(cfg);
             
             DBGF("[Main] Speed changed to %lu ms\n", cfg.moveInterval);
             
-            // Trigger visual feedback (1 to 4 blinks)
+            // Trigger visual feedback (1 to 5 blinks)
             speedBlinksLeft = currentIdx + 1;
             ledState = false;
             lastSpeedBlink = millis();
@@ -258,6 +258,8 @@ void handleButton(ButtonEvent evt) {
             }
             break;
         }
+
+        case BTN_SIX_CLICKS:
 
         case BTN_LONG_PRESS:
             if (portalActive) {

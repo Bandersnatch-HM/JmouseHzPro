@@ -96,8 +96,9 @@ Al conectar el dispositivo por primera vez a un cargador o al PC:
 | Acción en el Botón | Función Ejecutada | Reacción del LED |
 | :--- | :--- | :--- |
 | **1 Clic Corto** | **Pausar / Reanudar**: Detiene o activa el movimiento. | Pausado: *Efecto Respiración suave*. Activo: *Luz fija*. |
-| **2 Clics Rápidos** | **Velocidad**: Alterna el intervalo (5s, 15s, 30s, 60s). | Parpadea de 1 a 4 veces confirmando el nivel. |
+| **2 Clics Rápidos** | **Velocidad**: Alterna el intervalo (2s, 5s, 15s, 30s, 60s). | Parpadea de 1 a 5 veces confirmando el nivel. |
 | **3 Clics Rápidos** | **Modo de Movimiento**: Alterna entre los 9 patrones de movimiento. | Parpadea de 1 a 9 veces confirmando el modo. |
+| **6 Clics Rápidos** | **Portal Web WiFi**: Activa/Desactiva la red de configuración. | Destella 3 veces rápidamente indicando el cambio. |
 | **Mantener 3 segundos** | **Portal Web WiFi**: Activa/Desactiva la red de configuración. | Al llegar a los 3s, destella 3 veces rápidamente. |
 | **Mantener 10 segundos**| **Reset de Fábrica**: Borra configuraciones y emparejamientos.| Al segundo 7, parpadeo de advertencia estilo "bomba". |
 | **Mantener al conectar USB**| **Wipe de Emergencia**: Formateo físico de bajo nivel. | Destello continuo de confirmación en el arranque. |

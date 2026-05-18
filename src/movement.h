@@ -41,7 +41,7 @@ private:
     void _calcNextInterval();
     void _checkPause();
     void _genMicroJiggle(MoveStep* s, uint8_t& c);
-    void _genHorizontal(MoveStep* s, uint8_t& c);
+    void _genRandomScreen(MoveStep* s, uint8_t& c);
     void _genVertical(MoveStep* s, uint8_t& c);
     void _genCross(MoveStep* s, uint8_t& c);
     void _genBezier(MoveStep* s, uint8_t& c);

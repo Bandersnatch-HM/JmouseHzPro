@@ -66,11 +66,21 @@ void MovementEngine::_genMicroJiggle(MoveStep* s, uint8_t& c) {
     c = 2;
 }
 
-void MovementEngine::_genHorizontal(MoveStep* s, uint8_t& c) {
-    int8_t a = _amplitude;
-    s[0] = {a, 0, 15};
-    s[1] = {(int8_t)-a, 0, 15};
-    c = 2;
+void MovementEngine::_genRandomScreen(MoveStep* s, uint8_t& c) {
+    c = 0;
+    int totalX = 0, totalY = 0;
+    int steps = 5;
+    for (int i = 0; i < steps; i++) {
+        int8_t dx = random(-30, 31);
+        int8_t dy = random(-30, 31);
+        totalX += dx;
+        totalY += dy;
+        s[c] = {dx, dy, 25};
+        c++;
+    }
+    // Return approximately to origin so the mouse doesn't get lost
+    s[c] = {_clamp(-totalX), _clamp(-totalY), 25};
+    c++;
 }
 
 void MovementEngine::_genVertical(MoveStep* s, uint8_t& c) {
@@ -175,7 +185,7 @@ void MovementEngine::getNextSequence(MoveStep* steps, uint8_t& count) {
     }
     switch (mode) {
         case MODE_MICRO_JIGGLE:      _genMicroJiggle(steps, count); break;
-        case MODE_HORIZONTAL:        _genHorizontal(steps, count); break;
+        case MODE_HORIZONTAL:        _genRandomScreen(steps, count); break;
         case MODE_VERTICAL:          _genVertical(steps, count); break;
         case MODE_CROSS:             _genCross(steps, count); break;
         case MODE_BEZIER:            _genBezier(steps, count); break;

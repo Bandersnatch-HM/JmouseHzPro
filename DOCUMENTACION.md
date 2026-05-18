@@ -90,8 +90,9 @@ El dispositivo se controla mediante un único botón físico (conectado al pin `
 
 ```
 [ Click Simple ]      --> Pausar / Reanudar actividad (Alterna entre Jiggle y Pausa).
-[ Doble Click ]       --> Cambiar intervalo de jiggle cíclicamente (5s -> 15s -> 30s -> 60s).
+[ Doble Click ]       --> Cambiar intervalo de jiggle cíclicamente (2s -> 5s -> 15s -> 30s -> 60s).
 [ Triple Click ]      --> Cambiar patrón de movimiento cíclicamente entre los 9 modos.
+[ 6 Clics ]           --> Activar / Desactivar el Portal Web WiFi de configuración.
 [ Mantener 3 seg. ]   --> Activar / Desactivar el Portal Web WiFi de configuración.
 [ Mantener 10 seg. ]  --> Reseteo de Fábrica (Borrado total de NVS y emparejamientos BLE).
 [ Mantener al Boot ]  --> 🛟 Reseteo de Emergencia por Hardware (Hard Low-level Wipe).
@@ -142,7 +143,7 @@ El principal factor diferenciador de Jmouse HzPro frente a soluciones básicas e
 ### Los 9 Patrones de Movimiento
 
 1. `Micro Jiggle` (Modo 0): Movimiento imperceptible de 1-2 píxeles hacia adelante y hacia atrás. No interfiere con el trabajo normal del usuario en la pantalla.
-2. `Horizontal` (Modo 1): Barrido suave en el eje X.
+2. `Random Screen` (Modo 1): Saltos aleatorios por toda la pantalla.
 3. `Vertical` (Modo 2): Barrido suave en el eje Y.
 4. `Cross` (Modo 3): Movimiento combinando ambos ejes en forma de cruz.
 5. `Smooth Bezier` (Modo 4): Generación matemática de curvas de Bézier cúbicas, imitando los trazos curvos naturales de una mano humana sobre un ratón físico.
